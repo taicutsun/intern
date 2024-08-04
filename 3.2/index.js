@@ -44,6 +44,9 @@ const projects = [
   },
 ];
 
+
+
+/*
 function renderProjects(projects) {
   const projectsContainer = document.querySelector('.listOfProject');
   projectsContainer.innerHTML = '';
@@ -65,6 +68,75 @@ function renderProjects(projects) {
 }
 
 renderProjects(projects);
+*/
+
+function renderProjects(filteredProjects) {
+    const projectContainer = document.querySelector('.listOfProject');
+    projectContainer.innerHTML = '';
+
+    if (filteredProjects.length === 0) {
+      projectContainer.innerHTML = '<p class="no-results">No results</p>';
+      return;
+    }
+
+    filteredProjects.forEach(project => {
+      const projectDiv = document.createElement('div');
+      projectDiv.className = 'project';
+
+      const img = document.createElement('img');
+      img.src = project.imgSrc;
+      img.alt = project.imgAlt;
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'info';
+
+      const title = document.createElement('h2');
+      title.textContent = project.title;
+
+      const description = document.createElement('p');
+      description.textContent = project.description;
+
+      infoDiv.appendChild(title);
+      infoDiv.appendChild(description);
+      projectDiv.appendChild(img);
+      projectDiv.appendChild(infoDiv);
+      projectContainer.appendChild(projectDiv);
+    });
+  }
+
+  function filterProjects(query) {
+    return projects.filter(project => {
+      const lowerCaseQuery = query.toLowerCase();
+      return (
+        project.title.toLowerCase().includes(lowerCaseQuery) ||
+        project.description.toLowerCase().includes(lowerCaseQuery)
+      );
+    });
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);//saving "this" value
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('.search');
+    renderProjects(projects);
+
+    const handleSearch = debounce((e) => {
+      const query = e.target.value;
+      const filteredProjects = filterProjects(query);
+      renderProjects(filteredProjects);
+    }, 300);
+
+    searchInput.addEventListener('input', handleSearch);
+  });
+
+
+
 //PROJ
 
 //LABELS
@@ -125,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dropBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       closeAllDrop();
-      
+
       dropBtn.querySelector('.content').style.display = 'block';
     });
   });

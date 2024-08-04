@@ -190,6 +190,15 @@ h2 {
 }
 
 
+.search{
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  border: 1px solid #95bf47;
+  border-radius: 5px; 
+  height: 80%;
+}
+
 @media (max-width: 800px) {
   .listOfProject {
     padding: 5% 10% 0 10%;
